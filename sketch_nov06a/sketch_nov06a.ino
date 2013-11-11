@@ -133,12 +133,12 @@ void setup() {
   setGamma();
 
   // Debugging
-  g_program = 2;
+  g_program = 6;
 }
 
 void loop() {
   /*
-    for each strip, update
+    for each strip, upda6e
     sleep for step - processing time duration
   */
   switch(g_program) {
@@ -150,7 +150,18 @@ void loop() {
       }
       break;
       
+    // all white  
     case 1:
+      if (g_prevprogram != 2) {
+        g_prevprogram = 2;
+        turnOffAllStrips();
+        program_color = 0;
+        program_prevcolor = 0;
+        gamma = .1;
+        startEvent(STRIP0, 2000, BLACK, WHITE); //COLORS[program_color]
+        startEvent(STRIP1, 2000, BLACK, WHITE);
+        startEvent(STRIP2, 2000, BLACK, WHITE);
+      }
       break;
   
     // RGB unified fading
@@ -161,14 +172,14 @@ void loop() {
         program_color = 0;
         program_prevcolor = 0;
         gamma = .1;
-        startEvent(STRIP0, 2000, BLACK, COLORS[program_color]);
+        startEvent(STRIP0, 2000, BLACK, COLORS[program_color]); //COLORS[program_color]
         startEvent(STRIP1, 2000, BLACK, COLORS[program_color]);
         startEvent(STRIP2, 2000, BLACK, COLORS[program_color]);
       }
         if (g_status[STRIP0] == READY &&
             g_status[STRIP1] == READY &&
             g_status[STRIP2] == READY) {
-          startEvent(STRIP0, 2000, COLORS[program_prevcolor], COLORS[program_color]);
+          startEvent(STRIP0, 2000, COLORS[program_prevcolor], COLORS[program_color]); //COLORS[program_prevcolor]
           startEvent(STRIP1, 2000, COLORS[program_prevcolor], COLORS[program_color]);
           startEvent(STRIP2, 2000, COLORS[program_prevcolor], COLORS[program_color]);
           program_prevcolor = program_color;
@@ -193,7 +204,7 @@ void loop() {
         turnOffAllStrips();
         program_color = 0;
         gamma = .5;
-        startEvent(program_strip, 30, COLORS[program_color], COLORS[program_color]);
+        startEvent(program_strip, 20, COLORS[program_color], COLORS[program_color]);
       }
       // Select a new random strip
       if (g_status[STRIP0] == READY &&
@@ -203,7 +214,7 @@ void loop() {
          turnOffAllStrips();
          program_strip = random(NUM_STRIPS);
          program_color = random(NUM_COLORS-2);
-         delay(60);
+         delay(40);
          startEvent(program_strip, 50, COLORS[program_color], COLORS[program_color]); 
        }
        updateStrip(program_strip);
@@ -223,9 +234,9 @@ void loop() {
       g_status[STRIP2] == READY)
       {
         program_color = random(NUM_COLORS-1);
-        startEvent(STRIP0, 500, COLORS[program_color], BLACK);
-        startEvent(STRIP1, 500, COLORS[program_color] ,BLACK);
-        startEvent(STRIP2, 500, COLORS[program_color], BLACK);
+        startEvent(STRIP0, 425, COLORS[program_color], BLACK);
+        startEvent(STRIP1, 425, COLORS[program_color] ,BLACK);
+        startEvent(STRIP2, 425, COLORS[program_color], BLACK);
       }
           
       for (int strip = 0; strip < NUM_STRIPS; strip++) {
@@ -235,7 +246,7 @@ void loop() {
       break;
     
     // Color individual soft strobing
-     case PROGRAM_TEST_A:
+     case 5:
        if (g_prevprogram != PROGRAM_TEST_A) {
          g_prevprogram = PROGRAM_TEST_A;
 
@@ -266,7 +277,7 @@ void loop() {
        break;
      
      // Moving random colors
-     case PROGRAM_TEST_B:
+     case 6:
        //g_state = 0  rising
        //g_state = 1 falling
      
