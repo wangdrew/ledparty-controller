@@ -1,0 +1,1 @@
+#define NUM_LIGHT_PROGRAMS 9
