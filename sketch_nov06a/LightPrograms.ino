@@ -236,49 +236,132 @@ void lp_indiv_color_soft_strobe() {
 // Soft strobe strips 1 and 3, then 2
 void lp_indiv_side_center_color_soft_strobe() {
   if (g_prevprogram != 8) {
+    
     g_prevprogram = 8;
     turnOffAllStrips();
     program_color = 0;
     g_state[STRIP0] = 0;
     g_state[STRIP1] = 0;
     g_state[STRIP2] = 0; 
-    startEvent(STRIP0, 425, BLACK, COLORS[program_color]);
-    startEvent(STRIP2, 425, BLACK, COLORS[program_color]); 
+    startEvent(STRIP0, 1000, BLACK, COLORS[program_color]); //425
+    startEvent(STRIP2, 1000, BLACK, COLORS[program_color]); 
   }
-  
+     // Trigger rising edge of strip1
+   if (g_timer[STRIP0] >= 400 && g_state[STRIP0] == 0) {
+     g_state[STRIP1] = 0;
+     startEvent(STRIP1, 500, BLACK, COLORS[program_color]);
+   }
+   
+  if (g_status[STRIP0] == BUSY) {
+     updateStrip(STRIP0);
+     updateStrip(STRIP2);
+   } else if (g_state[STRIP0] == 0){
+     g_state[STRIP0] = 1;
+     g_state[STRIP2] = 1;
+     startEvent(STRIP0, 500, COLORS[program_color], BLACK);
+     startEvent(STRIP2, 500, COLORS[program_color], BLACK);
+     // Start entire loop again, start rising edge of strip0
+   } else if (g_status[STRIP0] == READY && g_status[STRIP1] == READY && g_status[STRIP2] == READY) {;
+     delay(1000);
+     g_state[STRIP0] = 0;
+     g_state[STRIP2] = 0;
+     program_color = random(9);
+     startEvent(STRIP0, 500, BLACK, COLORS[program_color]);
+     startEvent(STRIP2, 500, BLACK, COLORS[program_color]);
+   }
+   
+   if (g_status[STRIP1] == BUSY) {
+     updateStrip(STRIP1);
+   } else if (g_state[STRIP1] == 0){
+     g_state[STRIP1] = 1;
+     startEvent(STRIP1, 500, COLORS[program_color], BLACK);
+   }
+}
+
+
+  /*
   // Start STRIP1 rising edge depending on STRIP0 rising edge progress
-  if (g_timer[STRIP0] == 400 && g_state[STRIP0] == 0) {
-    startEvent(STRIP1, 425, BLACK, COLORS[program_color]);
+  if (g_timer[STRIP0] >= 800 && g_state[STRIP0] == 0 && g_status[STRIP1] == READY) {
+    Serial.println("rise");
+    startEvent(STRIP1, 1000, BLACK, COLORS[program_color]);
     g_state[STRIP1] = 0;
   }
+  
+    // Start STRIP1 falling edge when rising edge is complete
+  if (g_state[STRIP1] = 0 && g_status[STRIP1] == READY) {
+      Serial.println("fall");
+      startEvent(STRIP1, 1000, COLORS[program_color], BLACK);
+      g_state[STRIP1] = 1;
+  } 
   
   // Start STRIP0 & STRIP2 falling edge when rising edge is complete
   if (g_state[STRIP0] == 0 && g_state[STRIP2] == 0 &&
       g_status[STRIP0] == READY && g_status[STRIP2] == READY) {
-        startEvent(STRIP0, 425, COLORS[program_color], BLACK);
-        startEvent(STRIP2, 425, COLORS[program_color], BLACK);
+        Serial.println("back rise");
+        startEvent(STRIP0, 1000, COLORS[program_color], BLACK);
+        startEvent(STRIP2, 1000, COLORS[program_color], BLACK);
         g_state[STRIP0] = 1;
         g_state[STRIP2] = 1;
-  }
-  
-  // Start STRIP1 falling edge when rising edge is complete
-  if (g_state[STRIP1] = 0 && g_status[STRIP1] == READY) {
-      startEvent(STRIP1, 425, COLORS[program_color], BLACK);
-      g_state[STRIP1] = 1;
   }
   
   // Start STRIP0 & STRIP2 rising edge when falling edge is complete
   if (g_state[STRIP0] == 1 && g_state[STRIP2] == 1 &&
       g_status[STRIP0] == READY && g_status[STRIP2] == READY) {
-        delay(1000);
+        delay(2000);
+        Serial.println("back fall");
         program_color = random(NUM_COLORS - 2);
-        startEvent(STRIP0, 425, BLACK, COLORS[program_color]);
-        startEvent(STRIP2, 425, BLACK, COLORS[program_color]);
+        startEvent(STRIP0, 1000, BLACK, COLORS[program_color]);
+        startEvent(STRIP2, 1000, BLACK, COLORS[program_color]);
         g_state[STRIP0] = 0;
         g_state[STRIP2] = 0;
       }
+      
    updateStrip(STRIP0); 
    updateStrip(STRIP1);
    updateStrip(STRIP2);
+   */
+   
+// Program ID = 9
+// Soft strobe a random color on all strips
+void lp_soft_strobe_unified_blue() {
+  if (g_prevprogram != 9) {
+    g_prevprogram = 9;
+    turnOffAllStrips();  // reset strips
+  }
+  
+  if (g_status[STRIP0] == READY && 
+  g_status[STRIP1] == READY && 
+  g_status[STRIP2] == READY)
+  {
+    startEvent(STRIP0, 461, BLUE, DBLUE);
+    startEvent(STRIP1, 461, BLUE ,DBLUE);
+    startEvent(STRIP2, 461, BLUE ,DBLUE);
+  }
+      
+  for (int strip = 0; strip < NUM_STRIPS; strip++) {
+      updateStrip(strip);
+  }
+}
+
+// Program ID = 10
+// Soft strobe a random color on all strips
+void lp_soft_strobe_unified_red() {
+  if (g_prevprogram != 10) {
+    g_prevprogram = 10;
+    turnOffAllStrips();  // reset strips
+  }
+  
+  if (g_status[STRIP0] == READY && 
+  g_status[STRIP1] == READY && 
+  g_status[STRIP2] == READY)
+  {
+    startEvent(STRIP0, 461, RED, DRED);
+    startEvent(STRIP1, 461, RED ,DRED);
+    startEvent(STRIP2, 461, RED ,DRED);
+  }
+      
+  for (int strip = 0; strip < NUM_STRIPS; strip++) {
+      updateStrip(strip);
+  }
 }
 

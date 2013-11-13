@@ -22,12 +22,13 @@
 // sequence ID <0-254>
 // Intensity (gamma) value <0-255>
 // Tempo <0-255>
-int serial_commands[3] = {0,0,0};
+byte serial_command = 0;
 
 // Used by ManualCtrl
 byte commandByte0;
 byte commandByte1;
 byte commandByte2;
+int actionRecvd = 0;
 
 void setup() {
   setupPins();
@@ -38,9 +39,12 @@ void setup() {
 
 void loop() {
   
+  /*
   if(readSerial()) {
+    digitalWrite(22,HIGH);
     parseSerial();
-  }
+  }*/
+  readSerial();
   
   /*
     Run the current program by updating each strip then
@@ -101,6 +105,12 @@ void loop() {
        lp_indiv_side_center_color_soft_strobe();
        delay(g_step);
        break;
+       
+     case 9:
+       lp_soft_strobe_unified_red();
+       delay(g_step);
+       break;
+     
        
      Serial.println("Invalid");
   }

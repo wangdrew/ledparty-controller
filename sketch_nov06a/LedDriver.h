@@ -24,6 +24,9 @@ int PURPLE[3] = {255,0,255};
 int WHITE[3] = {255,255,255};
 int BLACK[3] = {0,0,0};
 
+// Custom colors for programs
+int DBLUE[3] = {0,0,127};
+int DRED[3] = {50,0,0};
 // Color wheel - used for random selection of colors
 int* COLORS[10] = {RED, ORANGE, YELLOW, LGREEN, GREEN, AQUA, BLUE, PURPLE, WHITE, BLACK};
 
