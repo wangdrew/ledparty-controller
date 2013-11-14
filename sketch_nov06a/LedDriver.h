@@ -93,6 +93,7 @@ int g_state[3] = {0,0,0};
 //Used for specific programs that require keeping track of current color/strip etc.
  int program_color = 0;
  int program_strip = 0;
+ int prev_program_strip = 0;
  int program_prevcolor = 0;
  int* program_prevcolors[3] = {RED,RED,RED};
 

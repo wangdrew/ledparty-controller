@@ -187,7 +187,7 @@ void lp_indiv_single_color_soft_strobe() {
    } else if (g_state[STRIP1] == 1 && g_state[STRIP2] == 1 
             && g_status[STRIP1] == READY && g_status[STRIP2] == READY)
    {
-     delay(500);
+     //delay(50);
      g_state[STRIP0] = 0;
      program_color = random(9);
      startEvent(STRIP0, 500, BLACK, COLORS[program_color]);
@@ -262,7 +262,7 @@ void lp_indiv_side_center_color_soft_strobe() {
      startEvent(STRIP2, 500, COLORS[program_color], BLACK);
      // Start entire loop again, start rising edge of strip0
    } else if (g_status[STRIP0] == READY && g_status[STRIP1] == READY && g_status[STRIP2] == READY) {;
-     delay(1000);
+     //delay(1000);
      g_state[STRIP0] = 0;
      g_state[STRIP2] = 0;
      program_color = random(9);
@@ -278,50 +278,6 @@ void lp_indiv_side_center_color_soft_strobe() {
    }
 }
 
-
-  /*
-  // Start STRIP1 rising edge depending on STRIP0 rising edge progress
-  if (g_timer[STRIP0] >= 800 && g_state[STRIP0] == 0 && g_status[STRIP1] == READY) {
-    Serial.println("rise");
-    startEvent(STRIP1, 1000, BLACK, COLORS[program_color]);
-    g_state[STRIP1] = 0;
-  }
-  
-    // Start STRIP1 falling edge when rising edge is complete
-  if (g_state[STRIP1] = 0 && g_status[STRIP1] == READY) {
-      Serial.println("fall");
-      startEvent(STRIP1, 1000, COLORS[program_color], BLACK);
-      g_state[STRIP1] = 1;
-  } 
-  
-  // Start STRIP0 & STRIP2 falling edge when rising edge is complete
-  if (g_state[STRIP0] == 0 && g_state[STRIP2] == 0 &&
-      g_status[STRIP0] == READY && g_status[STRIP2] == READY) {
-        Serial.println("back rise");
-        startEvent(STRIP0, 1000, COLORS[program_color], BLACK);
-        startEvent(STRIP2, 1000, COLORS[program_color], BLACK);
-        g_state[STRIP0] = 1;
-        g_state[STRIP2] = 1;
-  }
-  
-  // Start STRIP0 & STRIP2 rising edge when falling edge is complete
-  if (g_state[STRIP0] == 1 && g_state[STRIP2] == 1 &&
-      g_status[STRIP0] == READY && g_status[STRIP2] == READY) {
-        delay(2000);
-        Serial.println("back fall");
-        program_color = random(NUM_COLORS - 2);
-        startEvent(STRIP0, 1000, BLACK, COLORS[program_color]);
-        startEvent(STRIP2, 1000, BLACK, COLORS[program_color]);
-        g_state[STRIP0] = 0;
-        g_state[STRIP2] = 0;
-      }
-      
-   updateStrip(STRIP0); 
-   updateStrip(STRIP1);
-   updateStrip(STRIP2);
-   */
-
-// TODO: NEEDS TESTING   
 // Program ID = 9
 // Soft strobe a color sequentially on all strips
 void lp_sequential_color_soft_strobe() {
@@ -352,7 +308,6 @@ void lp_sequential_color_soft_strobe() {
   }
 }
 
-// TODO: NEEDS TESTING 
 // PROGRAM ID = 10
 // Fade to a random color on random strips
 void lp_random_color_fade() {
@@ -377,6 +332,97 @@ void lp_random_color_fade() {
   for (int strip = 0; strip < NUM_STRIPS; strip++) {
     updateStrip(strip);
   }
+}
+
+//PROGRAM ID = 11
+//Fade to a random color on sequential strip order
+void lp_sequential_color_fade() {
+    if (g_prevprogram != 11) {
+    g_prevprogram = 11;
+    turnOffAllStrips();  // reset strips
+    program_strip = 0;
+    for (int strip = 0; strip < NUM_STRIPS; strip++) {
+      program_color = random(NUM_COLORS-2);
+      program_prevcolors[strip] = COLORS[program_color];
+      startEvent(strip, 425, BLACK, COLORS[program_color]);
+    }
+  }
+  if (g_status[STRIP0] == READY &&
+      g_status[STRIP1] == READY &&
+      g_status[STRIP2] == READY){
+        prev_program_strip = program_strip;
+        if (prev_program_strip == 2) {
+          program_strip = 0;
+        } else {
+          program_strip = prev_program_strip + 1; 
+        }
+        program_color = random(NUM_COLORS-2);
+        startEvent(program_strip, 425, program_prevcolors[program_strip], COLORS[program_color]);
+        program_prevcolors[program_strip] = COLORS[program_color];
+      }
+  for (int strip = 0; strip < NUM_STRIPS; strip++) {
+    updateStrip(strip);
+  }
+}
+
+// Program ID = 12
+// Hard strobe a random color sequentially strip
+// TODO: Make this function independent of number of strips
+void lp_sequential_color_hard_strobe() {
+  if (g_prevprogram != 12) {
+    g_prevprogram = 12;
+    turnOffAllStrips();
+    program_color = 0;
+    program_strip = 0;
+    startEvent(program_strip, 20, COLORS[program_color], COLORS[program_color]);
+  }
+  // Select a new random strip
+  if (g_status[STRIP0] == READY &&
+      g_status[STRIP1] == READY &&
+      g_status[STRIP2] == READY)
+   {
+     
+     turnOffAllStrips();
+     prev_program_strip = program_strip;
+     if (prev_program_strip == 2) program_strip = 0;
+     else {
+       program_strip = prev_program_strip + 1;
+     }
+     program_color = random(NUM_COLORS-2);
+     delay(40);
+     startEvent(program_strip, 50, COLORS[program_color], COLORS[program_color]); 
+   }
+   updateStrip(program_strip);
+}
+
+void lp_initial_loop() {
+}
+  
+  // Program ID = 7
+// Hard strobe a random color on a random strip
+// TODO: Make this function independent of number of strips
+void lp_indiv_color_soft_strobe_roar() {
+  if (g_prevprogram != 13) {
+    g_prevprogram = 13;
+    turnOffAllStrips();
+    program_color = 0;
+    startEvent(program_strip, 444, COLORS[program_color], BLACK);
+  }
+  // Select a new random strip
+  if (g_status[STRIP0] == READY &&
+      g_status[STRIP1] == READY &&
+      g_status[STRIP2] == READY)
+   {
+     turnOffAllStrips();
+     program_strip = random(NUM_STRIPS);
+     program_color = random(NUM_COLORS-2);
+     startEvent(program_strip, 444, COLORS[program_color], BLACK); 
+   }
+   updateStrip(program_strip);
+}
+
+void lp_custom_soft_strobe(int* color, int dur, int strip) {
+  startEvent(strip, dur, color, BLACK);
 }
 
 /*   

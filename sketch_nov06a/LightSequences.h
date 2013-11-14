@@ -1,0 +1,1 @@
+#define NUM_LIGHT_SEQUENCES 1

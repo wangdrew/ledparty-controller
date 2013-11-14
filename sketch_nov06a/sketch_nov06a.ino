@@ -3,6 +3,7 @@
 
 #include "LedDriver.h"
 #include "LightPrograms.h"
+#include "LightSequences.h"
 
 #define PGID_MANUAL_CONTROL 99
 
@@ -17,20 +18,10 @@
 // Used only when program 10 is used (random all programs) 
  int g_programdur = 20;
 
-/* Begin serial comm variables */
 // Written into by ManualCtrl. These are commands input via serial
-// Format spec: 3 element array: 
-// sequence ID <0-254>
-// Intensity (gamma) value <0-255>
-// Tempo <0-255>
 byte serial_command = 0;
 
-// Used by ManualCtrl
-byte commandByte0;
-byte commandByte1;
-byte commandByte2;
-int actionRecvd = 0;
-/* End serial comm variables */
+boolean g_siren = false;
 
 void setup() {
   setupPins();
@@ -55,66 +46,79 @@ void loop() {
   switch(g_program) {
     // Turn off all strips
     case 0:
-      lp_all_off();
+      lp_all_off(); // serial -48
       delay(g_step);
       break;
       
     // Turn on all strips
     case 1:
-      lp_all_white();
+      lp_all_white(); // serial - 49
       delay(g_step);
       break;
   
     // Soft ROYGBIV fading
     case 2:
-      lp_rgb_unified_fading();
+      lp_rgb_unified_fading(); // serial - 50
       delay(g_step);
       break;
     
     // Flashy hard strobes on random strips
     case 3:
-      lp_indiv_color_hard_strobe();
+      lp_indiv_color_hard_strobe(); // serial - 51
       delay(g_step);
       break;
     
     // Color unified soft strobing
     case 4:
-      lp_unified_color_soft_strobe();
+      lp_unified_color_soft_strobe(); // serial 52
       delay(g_step);
       break;
     
     // Color independent interval soft strobing
      case 5:
-       lp_indiv_diffint_color_soft_strobe();
+       lp_indiv_diffint_color_soft_strobe(); //serial 53
        delay(g_step);
        break;
      
     // Moving random colors
      case 6:
-       lp_indiv_single_color_soft_strobe();
+       lp_indiv_single_color_soft_strobe(); // serial 54
        delay(g_step);
        break;
      
      case 7:
-       lp_indiv_color_soft_strobe();
+       lp_indiv_color_soft_strobe(); // serial 55
        delay(g_step);
        break;
      
-     case PGID_MANUAL_CONTROL:
-       break;
-     
      case 8:
-       lp_indiv_side_center_color_soft_strobe();
+       lp_indiv_side_center_color_soft_strobe(); // serial 56
        delay(g_step);
        break;
        
      case 9:
-       //lp_soft_strobe_unified_red();
+       lp_sequential_color_soft_strobe(); // serial 57
+       delay(g_step);
+       break;
+       
+     case 10:
+       lp_random_color_fade(); // serial 58
        delay(g_step);
        break;
      
+     case 11:
+       lp_sequential_color_fade(); // serial 59
+       delay(g_step);
+       break;
        
-     Serial.println("Invalid");
+     case 12:
+       lp_sequential_color_hard_strobe(); // serial 60
+       delay(g_step);
+       break;
+       
+     case 40:
+       ls_roar_sequence(); // serial 88
+       break;
   }
   // Global delay
   //   delay(g_step); <---- this should work but is causing some weird linking issues

@@ -77,10 +77,12 @@ void turnOffStrip(int id) {
 
 
 void turnOnSiren() {
+   g_siren = true;
    digitalWrite(g_siren_pin, HIGH);
 }
 
 void turnOffSiren() {
+   g_siren = false;
    digitalWrite(g_siren_pin, LOW);
 }
 
