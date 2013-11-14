@@ -320,7 +320,66 @@ void lp_indiv_side_center_color_soft_strobe() {
    updateStrip(STRIP1);
    updateStrip(STRIP2);
    */
-   
+
+// TODO: NEEDS TESTING   
+// Program ID = 9
+// Soft strobe a color sequentially on all strips
+void lp_sequential_color_soft_strobe() {
+  if (g_prevprogram != 9) {
+    g_prevprogram = 9;
+    turnOffAllStrips();  // reset strips
+    program_color = 0;
+    program_strip = 0;
+    startEvent(STRIP0, 425, COLORS[program_color], BLACK);
+  }
+  
+  if (g_status[STRIP0] == READY && program_strip == 0) {
+    program_strip = 1;
+    startEvent(STRIP1, 425, COLORS[program_color], BLACK);
+  } 
+  if (g_status[STRIP1] == READY && program_strip == 1) {
+    program_strip = 2;
+    startEvent(STRIP2, 425, COLORS[program_color], BLACK);
+  }
+  if (g_status[STRIP2] == READY && program_strip == 2) {
+    program_color = random(NUM_COLORS-1);
+    program_strip = 0;
+    startEvent(STRIP0, 425, COLORS[program_color], BLACK);
+  }
+      
+  for (int strip = 0; strip < NUM_STRIPS; strip++) {
+      updateStrip(strip);
+  }
+}
+
+// TODO: NEEDS TESTING 
+// PROGRAM ID = 10
+// Fade to a random color on random strips
+void lp_random_color_fade() {
+    if (g_prevprogram != 10) {
+    g_prevprogram = 10;
+    turnOffAllStrips();  // reset strips
+    program_strip = 0;
+    for (int strip = 0; strip < NUM_STRIPS; strip++) {
+      program_color = random(NUM_COLORS-2);
+      program_prevcolors[strip] = COLORS[program_color];
+      startEvent(strip, 425, BLACK, COLORS[program_color]);
+    }
+  }
+  if (g_status[STRIP0] == READY &&
+      g_status[STRIP1] == READY &&
+      g_status[STRIP2] == READY){
+        program_strip = random(NUM_STRIPS);
+        program_color = random(NUM_COLORS-2);
+        startEvent(program_strip, 425, program_prevcolors[program_strip], COLORS[program_color]);
+        program_prevcolors[program_strip] = COLORS[program_color];
+      }
+  for (int strip = 0; strip < NUM_STRIPS; strip++) {
+    updateStrip(strip);
+  }
+}
+
+/*   
 // Program ID = 9
 // Soft strobe a random color on all strips
 void lp_soft_strobe_unified_blue() {
@@ -365,3 +424,4 @@ void lp_soft_strobe_unified_red() {
   }
 }
 
+*/

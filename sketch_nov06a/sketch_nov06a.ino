@@ -17,6 +17,7 @@
 // Used only when program 10 is used (random all programs) 
  int g_programdur = 20;
 
+/* Begin serial comm variables */
 // Written into by ManualCtrl. These are commands input via serial
 // Format spec: 3 element array: 
 // sequence ID <0-254>
@@ -29,6 +30,7 @@ byte commandByte0;
 byte commandByte1;
 byte commandByte2;
 int actionRecvd = 0;
+/* End serial comm variables */
 
 void setup() {
   setupPins();
@@ -107,7 +109,7 @@ void loop() {
        break;
        
      case 9:
-       lp_soft_strobe_unified_red();
+       //lp_soft_strobe_unified_red();
        delay(g_step);
        break;
      
