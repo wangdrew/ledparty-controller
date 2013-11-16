@@ -8,15 +8,18 @@
 #define PGID_MANUAL_CONTROL 99
 
 // Program number
- int g_program = 0;
+int g_program = 0;
 
 // Previous program, used to determine whether to re-init the RGB
 // strips for a newly selected program
- int g_prevprogram = -1;
+int g_prevprogram = -1;
 
 // Program duration, how long (sec) to run each program.
 // Used only when program 10 is used (random all programs) 
- int g_programdur = 20;
+int g_programdur = 20;
+ 
+// Color tracking used for program 13
+int prog13colorindex = 0;
 
 // Written into by ManualCtrl. These are commands input via serial
 byte serial_command = 0;
@@ -116,9 +119,20 @@ void loop() {
        delay(g_step);
        break;
        
+     /*case 13:
+       lp_custom_solid_color(prog13colorindex); // serial 61
+       delay(g_step);
+       break;
+        //solid*/
+       
      case 40:
        ls_roar_sequence(); // serial 88
        break;
+       
+     case 41:
+       ls_loop_seq1(); // serial 89
+       break;
+       
   }
   // Global delay
   //   delay(g_step); <---- this should work but is causing some weird linking issues

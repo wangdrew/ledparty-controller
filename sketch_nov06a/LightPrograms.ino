@@ -125,7 +125,7 @@ void lp_unified_color_soft_strobe() {
 void lp_indiv_diffint_color_soft_strobe() {
    if (g_prevprogram != 5) {
      g_prevprogram = 5;
-
+     turnOffAllStrips();
      startEvent(STRIP0, 250, BLACK, RED);
      startEvent(STRIP1, 250, BLACK, GREEN);
      startEvent(STRIP2, 250, BLACK, BLUE);
@@ -394,16 +394,29 @@ void lp_sequential_color_hard_strobe() {
    }
    updateStrip(program_strip);
 }
-
-void lp_initial_loop() {
-}
   
-  // Program ID = 7
-// Hard strobe a random color on a random strip
+// Program ID = 13
+// Hold a solid color on all strips
+void lp_custom_solid_color(int colorindex) {
+   if (g_prevprogram != 13) {
+    g_prevprogram = 13;
+  }
+  for (int strip = 0; strip < NUM_COLORS-2; strip++) {
+    startEvent(strip, 10, COLORS[colorindex], COLORS[colorindex]);
+    updateStrip(strip);
+  }
+} 
+
+// Custom light program called by a sequence
+void lp_custom_soft_strobe(int* color, int dur, int strip) {
+  startEvent(strip, dur, color, BLACK);
+}
+
+// Soft strobe set to the tempo of ROAR
 // TODO: Make this function independent of number of strips
 void lp_indiv_color_soft_strobe_roar() {
-  if (g_prevprogram != 13) {
-    g_prevprogram = 13;
+  if (g_prevprogram != 14) {
+    g_prevprogram = 14;
     turnOffAllStrips();
     program_color = 0;
     startEvent(program_strip, 444, COLORS[program_color], BLACK);
@@ -419,10 +432,6 @@ void lp_indiv_color_soft_strobe_roar() {
      startEvent(program_strip, 444, COLORS[program_color], BLACK); 
    }
    updateStrip(program_strip);
-}
-
-void lp_custom_soft_strobe(int* color, int dur, int strip) {
-  startEvent(strip, dur, color, BLACK);
 }
 
 /*   

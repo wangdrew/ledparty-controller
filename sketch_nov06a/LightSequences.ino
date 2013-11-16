@@ -6,13 +6,98 @@ void setLightSequence(int ls_val) {
   }
 }
 
+void ls_loop_seq1() {
+  g_program = 0;
+  int std_duration = 2000;
+  int beat_timer = 0;
+  int random_variance = 0;
+  int random_selection = 0;
+  
+  while (true) {
+    if (Serial.available()) {
+      break;
+    }
+    random_selection = random(6);
+    random_variance = random(2000);
+    Serial.println(random_variance + std_duration, DEC);  
+    beat_timer = 0;
+    
+    switch(random_selection) {
+      case 0:
+        while (beat_timer < std_duration + random_variance) {
+          lp_sequential_color_soft_strobe();
+          if (Serial.available()) break;
+          delay(g_step);
+          beat_timer++;
+        }
+        break;
+        
+      case 1:
+        while (beat_timer < std_duration + random_variance) {
+          lp_indiv_side_center_color_soft_strobe();
+          if (Serial.available()) break;
+          delay(g_step);
+          beat_timer++;
+        }
+        break;
+        
+      case 2:
+        while (beat_timer < std_duration + random_variance) {
+          lp_indiv_color_soft_strobe();
+          if (Serial.available()) break;
+          delay(g_step);
+          beat_timer++;
+        }
+        break;
+        
+      case 3:
+        while (beat_timer < std_duration + random_variance) {
+          lp_unified_color_soft_strobe();
+          if (Serial.available()) break;
+          delay(g_step);
+          beat_timer++;
+        }
+        break;
+        
+      case 4:
+        while (beat_timer < std_duration + random_variance) {
+          lp_rgb_unified_fading();
+          if (Serial.available()) break;
+          delay(g_step);
+          beat_timer++;
+        }
+        break;
+        
+      case 5:
+        while (beat_timer < std_duration + random_variance) {
+          lp_sequential_color_fade();
+          if (Serial.available()) break;
+          delay(g_step);
+          beat_timer++;
+        }
+        break;
+        
+      case 6:
+        while (beat_timer < std_duration + random_variance) {
+          lp_indiv_single_color_soft_strobe();
+          if (Serial.available()) break;
+          delay(g_step);
+          beat_timer++;
+        }
+        break;
+    }
+  }
+}
+  
+
+
 
 void ls_roar_sequence() {
   g_program = 0; // Turn off after this sequence is complete
   int beat_timer = 0;
   int random_color = 0;
   int random_strip = 0;
-
+  delay(600);
   beat_timer = 0;
   while (beat_timer < 32) {
     lp_custom_soft_strobe(RED,448,STRIP1);

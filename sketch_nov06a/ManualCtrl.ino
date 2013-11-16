@@ -10,7 +10,18 @@ void readSerial() {
       serial_command = Serial.read();
       if (serial_command < 128) {
         if (serial_command < 88) {
+          
+          // Used for switching through solid colors 
+          if (serial_command == 61) {
+            if (prog13colorindex > NUM_COLORS - 2) {
+              prog13colorindex = 0;
+            } else {
+              prog13colorindex++;
+            }  
+          }
+          
           setLightProgram(serial_command - '0');
+          
         } else {
           setLightSequence(serial_command - '0');
         }
