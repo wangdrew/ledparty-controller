@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+	<head>
+		<title>iHouse</title>
+		<meta name="description" content="iHouse Lighting">
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'css/ihouse.css' %}">
+		<link rel="stylesheet" href="{% static 'css/thirdparty/jquery-ui/jquery-ui-1.10.3.custom.min.css' %}">
+	</head>
+	<body>
+		<div class="body">
+			<h1 class="center">iParty</h1>
+			<div class="button-grid center">
+				<table class="center" border="0">
+				<tr>
+					<td><button id="button1" class="myButton">Turn off all strips</button></td>
+					<td><button id="button2" class="myButton">Turn on all strips</button></td>
+				</tr>
+				<tr>
+					<td><button id="button3" class="myButton">Soft ROYGBIV fading</button></td>
+					<td><button id="button4" class="myButton">Flashy hard strobes on random strips</button></td>
+				</tr>
+				<tr>
+					<td><button id="button5" class="myButton">Color unified soft strobing</button></td>
+					<td><button id="button6" class="myButton">Color independent interval soft strobing </button></td>
+				</tr>
+				<tr>
+					<td><button id="button7" class="myButton">Moving random colors</button></td>
+					<td><button id="button8" class="myButton">Individual color soft strobe 1</button></td>
+				</tr>
+				<tr>
+					<td><button id="button9" class="myButton">Individual color soft strobe 2</button></td>
+					<td><button id="button10" class="myButton">Individual color soft strobe 3</button></td>
+				</tr>
+				<tr>
+					<td><button id="button11" class="myButton">Random Color Fade</button></td>
+					<td><button id="button12" class="myButton">Sequential Color Fade</button></td>
+				</tr>
+				<tr>
+					<td><button id="button13" class="myButton">Sequential Color Hard Strobe</button></td>
+					<td><button id="button14" class="myButton">Loop</button></td>
+				</tr>
+				</table>
+				<table class="table-lighting-control center">
+				<tr>
+					<td><button id="button15" class="myButton">Low Beam</button></td>
+					<td><button id="button16" class="myButton">Mid Beam</button></td>
+					<td><button id="button17" class="myButton">Over 9000</button></td>
+				</tr>
+				<tr>
+					<td><button id="button18" class="myButton">Sirens</button></td>
+				</tr>
+				</table>
+			</div>
+			<div class="center manual-control">
+				<form>
+  					<input class="manual-input" type="text">
+  					<br>
+  					<button id="button-rave" class="manual-control-button">Rave</button>
+  					<button id="button-tipsy" class="manual-control-button">I'm Feeling Tipsy</button>
+				</form>			
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="{% static 'js/lib/jquery/1.10.2/jquery-1.10.2.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/ihouse.js' %}"></script>
+</html>
